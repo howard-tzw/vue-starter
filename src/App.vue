@@ -1,8 +1,7 @@
 <template>
-  <div class="min-h-screen">
+  <div class="h-screen">
     <router-view></router-view>
   </div>
 </template>
 
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
