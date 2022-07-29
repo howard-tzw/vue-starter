@@ -3,7 +3,13 @@
   <div class="absolute pt-16 top-0 right-0 h-full w-80 z-20">
     <!-- drawer -->
     <div v-if="openDrawer" class="h-full py-4 px-3 bg-white">
-      <p>data</p>
+      <div v-if="curFactoryInfo">
+        <p>工廠狀態</p>
+        <p>經緯度</p>
+        <p>{{ curFactoryInfo.lng }}, {{ curFactoryInfo.lat }}</p>
+        <p>工廠外部資訊</p>
+        <p>{{ curFactoryInfo.name }}</p>
+      </div>
     </div>
     <!-- toggle button -->
     <div class="absolute top-28" :class="openDrawer ? '-left-4' : 'right-0'">
@@ -20,10 +26,11 @@
 <script lang="ts" setup>
 import L from "leaflet";
 import "leaflet.markercluster";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import { getFactories } from "@/api";
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+import { FactoryData } from "@/types";
 
 let map: L.Map;
 
@@ -33,6 +40,8 @@ const toggleDrawer = () => {
   if (openDrawer.value) openDrawer.value = false;
   else openDrawer.value = true;
 };
+
+const curFactoryInfo = ref<FactoryData | null>(null);
 
 onMounted(async () => {
   map = L.map("map").setView([23.6, 121], 8);
@@ -59,6 +68,7 @@ onMounted(async () => {
     marker.on("click", (ctx) => {
       console.log("marker clicked", ctx);
       openDrawer.value = true;
+      curFactoryInfo.value = factory;
     });
     // marker.bindPopup(
     //   `<p><strong style="font-size: 20px;">${factory.name}</strong></p>
