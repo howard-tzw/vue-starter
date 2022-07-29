@@ -1,37 +1,48 @@
 <template>
-  <div id="map" class="w-full h-full"></div>
+  <div class="drawer drawer-end">
+    <input
+      v-model="openDrawer"
+      id="my-drawer-4"
+      type="checkbox"
+      class="drawer-toggle"
+    />
+    <div class="drawer-content">
+      <div id="map" class="w-full h-full"></div>
+    </div>
+    <div class="drawer-side">
+      <label for="my-drawer-4" class="drawer-overlay"></label>
+      <ul class="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
+        <!-- Sidebar content here -->
+        <li><a>Sidebar Item 1</a></li>
+        <li><a>Sidebar Item 2</a></li>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import L from 'leaflet'
-import 'leaflet.markercluster'
-import { onMounted } from 'vue'
-import { getData } from '@/api'
-import 'leaflet/dist/leaflet.css'
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
+import L from "leaflet";
+import "leaflet.markercluster";
+import { onMounted, ref, watch } from "vue";
+import { getFactories } from "@/api";
+import "leaflet/dist/leaflet.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
-let map: L.Map
+let map: L.Map;
 
-const data = getData().features
+const openDrawer = ref(true);
 
-class MarkerIcon extends L.Icon {
-  constructor(iconUrl: string) {
-    super({
-      iconUrl: 'https://siongsng.github.io/Rapid-Antigen-Test-Taiwan-Map/' + iconUrl,
-      iconSize: [30, 30],
-      iconAnchor: [18, 36],
-      popupAnchor: [0, -38],
-    })
-  }
-}
+watch(openDrawer, () => {
+  console.log(openDrawer.value);
+});
 
 onMounted(async () => {
-  map = L.map('map').setView([23.6, 121], 8)
+  map = L.map("map").setView([23.6, 121], 8);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
       'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-  }).addTo(map)
+  }).addTo(map);
 
   const markers = L.markerClusterGroup({
     chunkedLoading: true,
@@ -39,56 +50,32 @@ onMounted(async () => {
     spiderfyOnMaxZoom: false,
     removeOutsideVisibleBounds: true,
     showCoverageOnHover: false,
-  })
+  });
 
-  const icons = {
-    green: new MarkerIcon('/assets/green_marker_icon.png'),
-    yellow: new MarkerIcon('/assets/yellow_marker_icon.png'),
-    red: new MarkerIcon('/assets/red_marker_icon.png'),
-    grey: new MarkerIcon('/assets/grey_marker_icon.png'),
-  }
+  const data = await getFactories(0.1, 120.48504632216294, 24.088258816482295);
+  console.log(data);
 
   for (let i = 0; i < data.length; i++) {
-    const pharmacy = data[i]
-    const count = data[i].properties.count
-    const coordinates: number[] = data[i].geometry.coordinates
-    const lng = coordinates[0]
-    const lat = coordinates[1]
-    const marker = L.marker(new L.LatLng(lat, lng))
-
-    marker.bindPopup(pharmacy.properties.name)
-    if (count == 0) {
-      markers.addLayer(generateMarker(pharmacy, icons.grey))
-    } else if (count <= 10) {
-      markers.addLayer(generateMarker(pharmacy, icons.red))
-    } else if (count <= 40) {
-      markers.addLayer(generateMarker(pharmacy, icons.yellow))
-    } else {
-      markers.addLayer(generateMarker(pharmacy, icons.green))
-    }
+    const factory = data[i];
+    const marker = L.marker(new L.LatLng(factory.lat, factory.lng));
+    marker.on("click", (ctx) => {
+      console.log("marker clicked", ctx);
+      openDrawer.value = true;
+    });
+    // marker.bindPopup(
+    //   `<p><strong style="font-size: 20px;">${factory.name}</strong></p>
+    //   <strong style="font-size: 16px;">品牌: 品牌</br>
+    //   </strong><br>
+    //   地址: 地址<br>
+    //   電話: 電話<br>
+    //   備註: 備註<br>
+    //   <small>最後更新時間: 更新時間</small><br>`
+    // );
+    markers.addLayer(marker);
   }
 
-  map.addLayer(markers)
-})
-
-const generateMarker = (pharmacy: any, icon: MarkerIcon) => {
-  const count = pharmacy.properties.count
-
-  const marker = L.marker([pharmacy.geometry.coordinates[1], pharmacy.geometry.coordinates[0]], { icon: icon })
-  marker.bindPopup(
-    `<p><strong style="font-size: 20px;">${pharmacy.properties.name}</strong></p>
-       <strong style="font-size: 16px;">品牌: ${pharmacy.properties.brands}</br>
-      <strong style="font-size: 16px;">剩餘 
-      ${count} 份 (每份五個)
-      </strong><br>
-      地址: ${pharmacy.properties.address}<br>
-      電話: ${pharmacy.properties.phone}<br>
-      備註: ${pharmacy.properties.note}<br>
-      <small>最後更新時間: ${pharmacy.properties.updated_at}</small><br>`,
-  )
-
-  return marker
-}
+  map.addLayer(markers);
+});
 </script>
 
 <style></style>
