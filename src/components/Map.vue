@@ -1,21 +1,18 @@
 <template>
-  <div class="drawer drawer-end">
-    <input
-      v-model="openDrawer"
-      id="my-drawer-4"
-      type="checkbox"
-      class="drawer-toggle"
-    />
-    <div class="drawer-content">
-      <div id="map" class="w-full h-full"></div>
+  <div id="map" class="h-full w-full z-10"></div>
+  <div class="absolute pt-16 top-0 right-0 h-full w-80 z-20">
+    <!-- drawer -->
+    <div v-if="openDrawer" class="h-full py-4 px-3 bg-white">
+      <p>data</p>
     </div>
-    <div class="drawer-side">
-      <label for="my-drawer-4" class="drawer-overlay"></label>
-      <ul class="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
-        <!-- Sidebar content here -->
-        <li><a>Sidebar Item 1</a></li>
-        <li><a>Sidebar Item 2</a></li>
-      </ul>
+    <!-- toggle button -->
+    <div class="absolute top-28" :class="openDrawer ? '-left-4' : 'right-0'">
+      <button
+        @click="toggleDrawer"
+        class="btn btn-square btn-outline bg-white text-gray-500 btn-sm"
+      >
+        {{ openDrawer ? ">" : "<" }}
+      </button>
     </div>
   </div>
 </template>
@@ -30,11 +27,12 @@ import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 
 let map: L.Map;
 
-const openDrawer = ref(true);
+const openDrawer = ref(false);
 
-watch(openDrawer, () => {
-  console.log(openDrawer.value);
-});
+const toggleDrawer = () => {
+  if (openDrawer.value) openDrawer.value = false;
+  else openDrawer.value = true;
+};
 
 onMounted(async () => {
   map = L.map("map").setView([23.6, 121], 8);
