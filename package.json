@@ -8,10 +8,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@mdi/js": "^7.0.96",
     "axios": "^0.27.2",
     "daisyui": "^2.19.1",
     "leaflet": "^1.8.0",
     "leaflet.markercluster": "^1.5.3",
+    "mdi-vue": "^3.0.13",
     "pinia": "^2.0.14",
     "vue": "^3.2.25",
     "vue-router": "4"
