@@ -2,7 +2,7 @@
   <div id="map" class="h-full w-full z-10"></div>
 
   <!-- Sidebar -->
-  <div v-if="openSidebar" class="absolute pt-16 top-0 right-0 h-full w-80 z-20">
+  <div v-if="isSidebarOpen" class="absolute pt-16 top-0 right-0 h-full w-80 z-20">
     <FactoryDetailSidebar @close="toggleSidebar" :factory="selectedFactory" />
   </div>
 </template>
@@ -19,11 +19,11 @@ import FactoryDetailSidebar from '@/components/FactoryDetailSidebar.vue'
 
 let map: L.Map
 
-const openSidebar = ref(false)
+const isSidebarOpen = ref(false)
 
 const toggleSidebar = () => {
-  if (openSidebar.value) openSidebar.value = false
-  else openSidebar.value = true
+  if (isSidebarOpen.value) isSidebarOpen.value = false
+  else isSidebarOpen.value = true
 }
 
 const selectedFactory = ref<FactoryData | null>(null)
@@ -31,6 +31,18 @@ const selectedFactory = ref<FactoryData | null>(null)
 const appState = useAppState()
 
 let selectedMarker: L.Marker | null = null
+
+// TileLayer
+const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution:
+    'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+})
+
+// WMTS 農地圖層 from disfactory
+const wmts = L.tileLayer('https://wmts.nlsc.gov.tw/wmts/nURBAN2/default/EPSG:3857/{z}/{y}/{x}', {
+  attribution: '<a href="https://maps.nlsc.gov.tw/" target="_blank">國土測繪圖資服務雲</a>',
+  maxZoom: 18,
+})
 
 appState.$subscribe((mutation, state) => {
   switch (state.pageState) {
@@ -42,9 +54,13 @@ appState.$subscribe((mutation, state) => {
         }
         map.off('click')
       }
+      if (map.hasLayer(wmts)) {
+        map.removeLayer(wmts)
+      }
       break
     case PageState.CREATE_FACTORY_1:
       map.on('click', onMapClick)
+      map.addLayer(wmts)
       break
   }
 
@@ -61,21 +77,7 @@ appState.$subscribe((mutation, state) => {
 
 // 如何根據 state 轉換螢幕？
 onMounted(async () => {
-  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution:
-      'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-  })
-
-  // WMTS 農地圖層 from disfactory
-  const wmts = L.tileLayer('https://wmts.nlsc.gov.tw/wmts/nURBAN2/default/EPSG:3857/{z}/{y}/{x}', {
-    attribution: '<a href="https://maps.nlsc.gov.tw/" target="_blank">國土測繪圖資服務雲</a>',
-    maxZoom: 18,
-  })
-
   map = L.map('map', { layers: [osm] }).setView([24.088258816482295, 120.48504632216294], 14)
-
-  map.addLayer(wmts)
-  map.removeLayer(wmts)
 
   const markers = L.markerClusterGroup({
     chunkedLoading: true,
@@ -95,7 +97,7 @@ onMounted(async () => {
     const marker = L.marker(new L.LatLng(factory.lat, factory.lng))
     marker.on('click', ctx => {
       console.log('marker clicked', ctx)
-      openSidebar.value = true
+      isSidebarOpen.value = true
       selectedFactory.value = factory
     })
     // marker.bindPopup(

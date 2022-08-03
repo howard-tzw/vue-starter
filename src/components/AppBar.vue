@@ -4,7 +4,10 @@
   </div>
   <!-- add relative and z-30 for overlap FactoryDetailPage -->
   <div v-else class="navbar bg-neutral text-neutral-content flex justify-between relative">
-    <p class="p-3">新增可疑工廠</p>
+    <p v-if="appState.pageState === PageState.CREATE_FACTORY_1" class="p-3">新增可疑工廠</p>
+    <button @click="stepBack" class="btn">
+      <mdicon v-if="appState.pageState !== PageState.CREATE_FACTORY_1" name="arrow-left" />
+    </button>
 
     <div class="text-sm breadcrumbs">
       <ul>
@@ -26,6 +29,11 @@ const appState = useAppState()
 const cancel = () => {
   appState.$patch({
     pageState: PageState.INITIAL,
+  })
+}
+const stepBack = () => {
+  appState.$patch({
+    pageState: appState.pageState - 1,
   })
 }
 </script>

@@ -23,13 +23,16 @@
   </div>
 
   <div v-if="appState.pageState === PageState.CREATE_FACTORY_3" class="absolute top-0 z-20 w-full h-full pt-16">
-    <div class="w-full h-full bg-white">Confirm</div>
+    <div class="w-full h-full bg-white">
+      <ConfirmFactoryStep />
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useAppState, PageState } from '@/store/appState.js'
 import ImageUploadStep from '@/components/ImageUploadStep.vue'
+import ConfirmFactoryStep from '@/components/ConfirmFactoryStep.vue'
 
 const appState = useAppState()
 const createFactory = () => {
