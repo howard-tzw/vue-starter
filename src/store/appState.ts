@@ -6,7 +6,9 @@ interface AppState {
 
 export const enum PageState {
   INITIAL,
-  CREATE_FACTORY,
+  CREATE_FACTORY_1,
+  CREATE_FACTORY_2,
+  CREATE_FACTORY_3,
 }
 
 export const useAppState = defineStore({
