@@ -12,15 +12,18 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - uses: cypress-io/github-action@v4
+      - uses: actions/cache@v2
         with:
-          # env: PORT=4000
-          build: yarn run build
-          start: yarn run start
+          path: ~/.yarn
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-
+      - run: npm install -g yarn
+      - run: yarn install --frozen-lockfile # install dependencies
+      - run: yarn build # build the project
+   
    
