@@ -3,12 +3,12 @@ name: CI
 on:
   push:
     branches:
-      - main
-      - production
+      - disfactory
+
   pull_request:
     branches:
-      - main
-      - production
+      - disfactory
+   
 
 jobs:
   build-and-test:
@@ -28,19 +28,12 @@ jobs:
       - run: yarn install --frozen-lockfile # install dependencies
       - run: yarn build # build the project
 
-      # deploy site to netlify using secrets created on repository
-      - uses: netlify/actions/cli@master
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-        with:
-          args: deploy --dir=dist --prod
       # deploy to github page
       - uses: JamesIves/github-pages-deploy-action@3.7.1
       - name: Deploy to GitHub Pages
       with:
         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        BASE_BRANCH: main
+        BASE_BRANCH: disfactory
         BRANCH: gh-pages
         SINGLE_COMMIT: true
         COMMIT_MESSAGE: Deploy [ci skip]
