@@ -12,36 +12,15 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2 # setup the repository in the runner
-      - name: Setup Node.js # setup Node.js in the runner
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: '16'
-      - name: Install package
-        run: yarn install
-      - name: Build
-        run: yarn build
-
-      # deploy to github page
-      - uses: JamesIves/github-pages-deploy-action@3.7.1
-      - name: Deploy to GitHub Pages
-      with:
-        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        BASE_BRANCH: disfactory
-        BRANCH: gh-pages
-        SINGLE_COMMIT: true
-        COMMIT_MESSAGE: Deploy [ci skip]
-        FOLDER: dist
-
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js 12.x
-      uses: actions/setup-node@v2
-      with:
-        node-version: 12.x
-    - name: Install package
-      run: cd app && yarn install
-    - name: Testing
-      run: cd app && yarn test
+          node-version: 16
+      - uses: cypress-io/github-action@v4
+        with:
+          # env: PORT=4000
+          build: yarn run build
+          start: yarn run start
+   
