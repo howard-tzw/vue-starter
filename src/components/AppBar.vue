@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import { PageState, useAppState } from '@/store/appState.js'
+import { PageState, useAppState } from '@/store/appState'
 
 const appState = useAppState()
 const cancel = () => {

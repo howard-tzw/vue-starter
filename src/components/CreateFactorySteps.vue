@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useAppState, PageState } from '@/store/appState.js'
+import { useAppState, PageState } from '@/store/appState'
 import ImageUploadStep from '@/components/ImageUploadStep.vue'
 import ConfirmFactoryStep from '@/components/ConfirmFactoryStep.vue'
 

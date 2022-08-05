@@ -38,10 +38,15 @@ const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 })
 
-// WMTS 農地圖層 from disfactory
-const wmts = L.tileLayer('https://wmts.nlsc.gov.tw/wmts/nURBAN2/default/EPSG:3857/{z}/{y}/{x}', {
+// Web Map Tile Service (WMTS) 農地圖層 from disfactory
+const wmts = L.tileLayer.wms('https://wmts.nlsc.gov.tw/wmts/nURBAN2/default/EPSG:3857/{z}/{y}/{x}', {
+  layers: 'LUIMAP',
+  format: 'image/png',
+  styles: 'default',
   attribution: '<a href="https://maps.nlsc.gov.tw/" target="_blank">國土測繪圖資服務雲</a>',
   maxZoom: 18,
+  transparent: true,
+  opacity: 0.8,
 })
 
 appState.$subscribe((mutation, state) => {
@@ -87,7 +92,8 @@ onMounted(async () => {
     showCoverageOnHover: false,
   })
 
-  const data = (await import('../mockData/factories.json')).default
+  // @ts-ignore
+  const data = (await import('../mockData/factories.json')).default as FactoryData[]
   console.log(data)
 
   // issue: 把重疊的地點刪掉
