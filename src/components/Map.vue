@@ -6,7 +6,7 @@
     <FactoryDetailSidebar @close="toggleSidebar" :factory="selectedFactory" />
   </div>
 
-  <div class="absolute pt-16 top-10 left-20 z-20">
+  <div class="absolute pt-16 top-3 left-20 z-20">
     <el-select v-model="value" class="m-2" placeholder="顯示設定" size="large">
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
     </el-select>
