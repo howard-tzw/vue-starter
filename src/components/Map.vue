@@ -5,6 +5,12 @@
   <div v-if="isSidebarOpen" class="absolute pt-16 top-0 right-0 h-full w-80 z-20">
     <FactoryDetailSidebar @close="toggleSidebar" :factory="selectedFactory" />
   </div>
+
+  <div class="absolute pt-16 top-10 left-20 z-20">
+    <el-select v-model="value" class="m-2" placeholder="顯示設定" size="large">
+      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+    </el-select>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -120,6 +126,19 @@ onMounted(async () => {
 
   map.addLayer(markers)
 })
+
+const value = ref('')
+
+const options = [
+  {
+    value: 'Option1',
+    label: 'Option1',
+  },
+  {
+    value: 'Option2',
+    label: 'Option2',
+  },
+]
 </script>
 
 <style></style>
