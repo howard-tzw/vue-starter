@@ -7,7 +7,7 @@
       <button @click="removeImage(src)" class="absolute -right-2 -top-2 bg-white rounded-full w-6 border">
         &times;
       </button>
-      <img :src="src" class="w-28" />
+      <img :src="src" class="w-28 h-24" />
     </div>
   </div>
 </template>

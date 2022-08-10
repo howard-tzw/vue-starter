@@ -14,7 +14,7 @@ export const enum PageState {
 export const useAppState = defineStore({
   id: 'app',
   state: (): AppState => ({
-    pageState: PageState.CREATE_FACTORY_2,
+    pageState: PageState.INITIAL,
   }),
   getters: {},
   actions: {},
