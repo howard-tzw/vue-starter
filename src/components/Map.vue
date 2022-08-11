@@ -6,6 +6,7 @@
     <FactoryDetailSidebar @close="toggleSidebar" :factory="selectedFactory" />
   </div>
 
+  <!-- select -->
   <div class="absolute pt-16 top-3 left-20 z-20">
     <el-select v-model="value" class="m-2" placeholder="顯示設定" size="large">
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
@@ -18,10 +19,12 @@ import L from 'leaflet'
 import 'leaflet.markercluster'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
+import 'leaflet.tilelayer.colorfilter'
 import { onMounted, ref } from 'vue'
 import { FactoryData } from '@/types'
 import { useAppState, PageState } from '@/store/appState'
 import FactoryDetailSidebar from '@/components/FactoryDetailSidebar.vue'
+import { useMapState, osm } from '@/store/map'
 
 let map: L.Map
 
@@ -35,29 +38,16 @@ const toggleSidebar = () => {
 const selectedFactory = ref<FactoryData | null>(null)
 
 const appState = useAppState()
+const mapState = useMapState()
 
 let selectedMarker: L.Marker | null = null
-
-// TileLayer
-const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution:
-    'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-})
-
-// Web Map Tile Service (WMTS) 農地圖層 from disfactory
-const wmts = L.tileLayer.wms('https://wmts.nlsc.gov.tw/wmts/nURBAN2/default/EPSG:3857/{z}/{y}/{x}', {
-  layers: 'LUIMAP',
-  format: 'image/png',
-  styles: 'default',
-  attribution: '<a href="https://maps.nlsc.gov.tw/" target="_blank">國土測繪圖資服務雲</a>',
-  maxZoom: 18,
-  transparent: true,
-  opacity: 0.8,
-})
 
 appState.$subscribe((mutation, state) => {
   switch (state.pageState) {
     case PageState.INITIAL:
+      if (mapState.isLUIMapVisable) {
+        mapState.removeLUILayer(map)
+      }
       if (map.listens('click')) {
         if (selectedMarker) {
           selectedMarker.remove()
@@ -65,18 +55,16 @@ appState.$subscribe((mutation, state) => {
         }
         map.off('click')
       }
-      if (map.hasLayer(wmts)) {
-        map.removeLayer(wmts)
-      }
       break
     case PageState.CREATE_FACTORY_1:
+      if (!mapState.isLUIMapVisable) {
+        mapState.addLUILayer(map)
+      }
       map.on('click', onMapClick)
-      map.addLayer(wmts)
       break
   }
 
   function onMapClick(e: L.LeafletMouseEvent) {
-    console.log('onMapClick')
     if (selectedMarker) {
       selectedMarker.setLatLng(e.latlng)
     } else {
@@ -108,7 +96,6 @@ onMounted(async () => {
     const factory = data[i]
     const marker = L.marker(new L.LatLng(factory.lat, factory.lng))
     marker.on('click', ctx => {
-      console.log('marker clicked', ctx)
       isSidebarOpen.value = true
       selectedFactory.value = factory
     })
