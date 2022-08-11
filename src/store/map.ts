@@ -13,27 +13,34 @@ export const useMapState = defineStore({
   getters: {},
   actions: {
     addLUILayer(map: L.Map) {
-      if (map.hasLayer(osm)) {
-        map.removeLayer(osm)
-      }
+      map.eachLayer(layer => {
+        if (isTileLayer(layer)) {
+          map.removeLayer(layer)
+        }
+      })
       map.addLayer(wmtsWithFilter)
       map.addLayer(osmWithFilter)
       this.isLUIMapVisable = true
     },
     removeLUILayer(map: L.Map) {
-      if (map.hasLayer(wmtsWithFilter)) {
-        console.log('removing wmtsWithFilter layer')
-        map.removeLayer(wmtsWithFilter)
-      }
-      if (map.hasLayer(osmWithFilter)) {
-        console.log('removing osmWithFilter layer')
-        map.removeLayer(osmWithFilter)
-      }
+      map.eachLayer(layer => {
+        if (isTileLayer(layer)) {
+          map.removeLayer(layer)
+        }
+      })
+
       map.addLayer(osm)
       this.isLUIMapVisable = false
     },
+    toggleLUILayer(map: L.Map, isVisible: boolean) {
+      isVisible ? this.addLUILayer(map) : this.removeLUILayer(map)
+    },
   },
 })
+
+const isTileLayer = (layer: L.Layer) => {
+  return layer.getPane()?.classList.contains('leaflet-tile-pane')
+}
 
 export const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution:

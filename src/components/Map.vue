@@ -1,16 +1,15 @@
 <template>
   <div id="map" class="h-full w-full z-10"></div>
 
-  <!-- Sidebar -->
-  <div v-if="isSidebarOpen" class="absolute pt-16 top-0 right-0 h-full w-80 z-20">
-    <FactoryDetailSidebar @close="toggleSidebar" :factory="selectedFactory" />
-  </div>
+  <FactoryDetailSidebar v-if="isSidebarOpen" @close="toggleSidebar" :factory="selectedFactory" />
 
-  <!-- select -->
   <div class="absolute pt-16 top-3 left-20 z-20">
-    <el-select v-model="value" class="m-2" placeholder="顯示設定" size="large">
-      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-    </el-select>
+    <el-popover trigger="click" title="顯示農地範圍">
+      <template #reference>
+        <el-button>顯示設定</el-button>
+      </template>
+      <el-switch v-model="LUIMapVisable" />
+    </el-popover>
   </div>
 </template>
 
@@ -20,10 +19,10 @@ import 'leaflet.markercluster'
 import 'leaflet/dist/leaflet.css'
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
 import 'leaflet.tilelayer.colorfilter'
-import { onMounted, ref } from 'vue'
-import { FactoryData } from '@/types'
-import { useAppState, PageState } from '@/store/appState'
+import { computed, onMounted, ref, unref } from 'vue'
 import FactoryDetailSidebar from '@/components/FactoryDetailSidebar.vue'
+import { FactoryData } from '@/store/factory'
+import { useAppState, PageState } from '@/store/appState'
 import { useMapState, osm } from '@/store/map'
 
 let map: L.Map
@@ -31,9 +30,15 @@ let map: L.Map
 const isSidebarOpen = ref(false)
 
 const toggleSidebar = () => {
-  if (isSidebarOpen.value) isSidebarOpen.value = false
-  else isSidebarOpen.value = true
+  isSidebarOpen.value = !isSidebarOpen.value
 }
+
+const LUIMapVisable = computed({
+  get: () => mapState.isLUIMapVisable,
+  set: val => {
+    mapState.toggleLUILayer(map, val)
+  },
+})
 
 const selectedFactory = ref<FactoryData | null>(null)
 
@@ -113,19 +118,6 @@ onMounted(async () => {
 
   map.addLayer(markers)
 })
-
-const value = ref('')
-
-const options = [
-  {
-    value: 'Option1',
-    label: 'Option1',
-  },
-  {
-    value: 'Option2',
-    label: 'Option2',
-  },
-]
 </script>
 
 <style></style>
