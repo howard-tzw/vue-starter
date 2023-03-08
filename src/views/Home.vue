@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import GanttChart from '@/components/GanttChart.vue'
+import MyChart from '@/components/MyChart.vue'
 </script>
 
 <template>
@@ -8,4 +9,5 @@ import GanttChart from '@/components/GanttChart.vue'
 	</div>
 
 	<GanttChart />
+	<MyChart />
 </template>
