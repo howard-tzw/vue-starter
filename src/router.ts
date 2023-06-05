@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Home from '@/views/Home.vue'
 import Carousel from '@/views/Carousel.vue'
+import VueSelect from '@/views/VueSelect.vue'
 
 const routes = [
 	{
@@ -13,6 +14,11 @@ const routes = [
 		path: '/carousel',
 		name: 'Carousel',
 		component: Carousel,
+	},
+	{
+		path: '/vue3-select',
+		name: 'VueSelect',
+		component: VueSelect,
 	},
 	// Fallback route for handling 404s
 	{
