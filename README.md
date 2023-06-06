@@ -5,7 +5,6 @@
 - Vite 
 - TailwindCSS 
 - daisyUI
-- axios
 - vue-router
 - pinia
 
