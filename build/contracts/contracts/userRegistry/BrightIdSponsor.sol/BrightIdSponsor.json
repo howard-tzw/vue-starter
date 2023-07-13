@@ -1,0 +1,37 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "BrightIdSponsor",
+  "sourceName": "contracts/userRegistry/BrightIdSponsor.sol",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "name": "Sponsor",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "addr",
+          "type": "address"
+        }
+      ],
+      "name": "sponsor",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x6080604052348015600f57600080fd5b5060bf8061001e6000396000f3fe6080604052348015600f57600080fd5b506004361060285760003560e01c8063766c4f3714602d575b600080fd5b605060048036036020811015604157600080fd5b50356001600160a01b03166052565b005b6040516001600160a01b038216907f45731ed8c44f9ae4a6da66b49b81184a6565962041a2485f62942faa4da6df6090600090a25056fea2646970667358221220e080091f2b56f89a0d3a2834ad6881a25a469cca240c3992299fe794db2525c264736f6c634300060c0033",
+  "deployedBytecode": "0x6080604052348015600f57600080fd5b506004361060285760003560e01c8063766c4f3714602d575b600080fd5b605060048036036020811015604157600080fd5b50356001600160a01b03166052565b005b6040516001600160a01b038216907f45731ed8c44f9ae4a6da66b49b81184a6565962041a2485f62942faa4da6df6090600090a25056fea2646970667358221220e080091f2b56f89a0d3a2834ad6881a25a469cca240c3992299fe794db2525c264736f6c634300060c0033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

@@ -24,6 +24,9 @@ onMounted(async () => {
 <template>
 	<div>{{ blockNumber }}</div>
 	<div>{{ formatEther(balance) }}</div>
+	<RouterLink to="/clrfund">
+		<p class="text-blue-500">Clrfund</p>
+	</RouterLink>
 </template>
 
 <style lang="css"></style>

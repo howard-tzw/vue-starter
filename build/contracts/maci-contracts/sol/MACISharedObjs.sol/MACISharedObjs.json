@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "MACISharedObjs",
+  "sourceName": "maci-contracts/sol/MACISharedObjs.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220bbc082c844894eb87dc7fb038fa317c5ea8f3328b8056c7290a7e141d42f268c64736f6c634300060c0033",
+  "deployedBytecode": "0x6080604052600080fdfea2646970667358221220bbc082c844894eb87dc7fb038fa317c5ea8f3328b8056c7290a7e141d42f268c64736f6c634300060c0033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "MACIParameters",
+  "sourceName": "maci-contracts/sol/MACIParameters.sol",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea264697066735822122083da16dd2f20b4e2fb501f712dcc745968bd9f7aca448b73bfe7e07d01e5f99f64736f6c634300060c0033",
+  "deployedBytecode": "0x6080604052600080fdfea264697066735822122083da16dd2f20b4e2fb501f712dcc745968bd9f7aca448b73bfe7e07d01e5f99f64736f6c634300060c0033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

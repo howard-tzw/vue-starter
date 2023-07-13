@@ -1,12 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import Home from '@/views/Home.vue'
+import Clrfund from '@/views/Clrfund.vue'
 
 const routes = [
 	{
-		path: '/:address',
+		path: '/',
 		name: 'Home',
 		component: Home,
+	},
+	{
+		path: '/clrfund',
+		name: 'Clrfund',
+		component: Clrfund,
 	},
 	// Fallback route for handling 404s
 	{
