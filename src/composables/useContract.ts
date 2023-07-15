@@ -72,19 +72,12 @@ export function useContract(options: UseContractOptions) {
 	})
 
 	const data = computed<Info[]>(() => {
-		const res: Info[] = [
-			{
-				name: 'Contract address',
-				value: address,
-				link: EXPLORER_URL + address,
-			},
-		]
+		const res: Info[] = []
 
 		for (const [key, value] of Object.entries(state)) {
 			res.push({
 				name: key,
 				value,
-				link: isAddress(value) ? EXPLORER_URL + value : undefined,
 			})
 		}
 

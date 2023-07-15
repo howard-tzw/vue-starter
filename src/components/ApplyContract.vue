@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useContract } from '@/composables/useContract'
 import { UseContractOptions } from '@/composables/useContract'
 import Contract from '@/components/Contract.vue'
 import { computed } from 'vue'
+import Address from '@/components/Address.vue'
 
 type Props = {
 	title: string
@@ -22,10 +24,29 @@ const contractProps = computed(() => ({
 	execFns,
 	viewFns,
 }))
+
+const collapsed = ref(props.open)
+const contractAddress = computed(() => props.useContractOptions.address)
 </script>
 
 <template>
-	<Contract v-bind="contractProps" />
+	<div class="my-2 w-full">
+		<div class="flex cursor-pointer flex-row justify-between" @click="collapsed = !collapsed">
+			<div class="flex flex-col mb-2">
+				<div class="text-xl">{{ title }}</div>
+				<Address :address="contractAddress" />
+			</div>
+
+			<div class="ml-4">
+				<div v-if="!collapsed">open</div>
+				<div v-else>close</div>
+			</div>
+		</div>
+
+		<div v-if="collapsed">
+			<Contract v-bind="contractProps" />
+		</div>
+	</div>
 </template>
 
 <style></style>

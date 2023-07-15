@@ -1,7 +1,6 @@
 export type Info = {
 	name: string
 	value: any
-	link?: string
 }
 
 export type AbiEvent = {
