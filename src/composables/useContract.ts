@@ -1,12 +1,12 @@
 import { onMounted, reactive, computed } from 'vue'
 import { Address, PublicClient, getAddress, isAddress } from 'viem'
 import type { Info } from '@/types'
-import { EXPLORER_URL } from '@/constants'
 
 export type UseContractOptions = {
 	client: PublicClient
 	address: Address
 	abi: any
+	fetch?: boolean
 }
 
 /**
@@ -14,7 +14,12 @@ export type UseContractOptions = {
  * - 需要能夠從 abi 取得所有 pure 的 name
  */
 export function useContract(options: UseContractOptions) {
-	const { client, address, abi } = options
+	const { client, address, abi, fetch } = options
+
+	let isFetch = true
+	if (fetch === false) {
+		isFetch = false
+	}
 
 	const pureFns = abi.filter((abi: any) => {
 		return abi.stateMutability === 'view' && abi.type === 'function' && !abi.inputs.length
@@ -59,6 +64,8 @@ export function useContract(options: UseContractOptions) {
 	} as const
 
 	onMounted(async () => {
+		if (!isFetch) return
+
 		const results = await client.multicall({
 			contracts: pureFnNames.map(name => ({
 				...contractConfig,

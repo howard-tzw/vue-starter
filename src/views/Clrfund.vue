@@ -46,7 +46,7 @@ const maciFactory = {
 	abi: MACIFactory,
 }
 
-const { state } = useContract(maci)
+const { state } = useContract({ ...maci, fetch: false })
 
 const startTime = computed(() => {
 	if (!state.signUpTimestamp) return ''
@@ -64,6 +64,19 @@ const votingDeadline = computed(() => {
 		Number(state.signUpTimestamp + state.signUpDurationSeconds + state.votingDurationSeconds),
 	).toLocaleString()
 })
+
+const { events } = useContract({
+	...fundingRound,
+	fetch: false,
+})
+client.watchContractEvent({
+	...fundingRound,
+	eventName: events[0].name,
+	onLogs: logs => {
+		console.log(logs)
+	},
+})
+console.log('watching event:', events[0].name)
 
 onMounted(async () => {
 	blockNumber.value = await client.getBlockNumber()
