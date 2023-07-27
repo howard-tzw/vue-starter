@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Home from '@/views/Home.vue'
 import Clrfund from '@/views/Clrfund.vue'
+import Contribute from '@/views/Contribute.vue'
+import Claim from '@/views/Claim.vue'
 
 const routes = [
 	{
@@ -13,6 +15,16 @@ const routes = [
 		path: '/clrfund',
 		name: 'Clrfund',
 		component: Clrfund,
+	},
+	{
+		path: '/contribute',
+		name: 'Contribute',
+		component: Contribute,
+	},
+	{
+		path: '/claim',
+		name: 'Claim',
+		component: Claim,
 	},
 	// Fallback route for handling 404s
 	{

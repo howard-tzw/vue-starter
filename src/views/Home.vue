@@ -14,7 +14,6 @@ const client = createPublicClient({
 })
 
 const blockNumber = ref<bigint>(0n)
-const balance = ref<bigint>(0n)
 
 onMounted(async () => {
 	blockNumber.value = await client.getBlockNumber()
@@ -33,11 +32,21 @@ onMounted(async () => {
 </script>
 
 <template>
-	<div>{{ blockNumber }}</div>
-	<div>{{ formatEther(balance) }}</div>
-	<RouterLink to="/clrfund">
-		<p class="text-blue-500">CLRFund</p>
-	</RouterLink>
+	<div class="p-10 flex justify-center items-center">
+		<div class="flex flex-col text-center justify-center">
+			<p>block number:</p>
+			<p>{{ blockNumber }}</p>
+			<RouterLink to="/clrfund">
+				<p class="text-blue-500">clrfund</p>
+			</RouterLink>
+			<RouterLink to="/contribute">
+				<p class="text-blue-500">contribute</p>
+			</RouterLink>
+			<RouterLink to="/claim">
+				<p class="text-blue-500">claim</p>
+			</RouterLink>
+		</div>
+	</div>
 </template>
 
 <style lang="css"></style>
